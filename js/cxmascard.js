@@ -15,28 +15,24 @@ window.cx = window.cx || {};
         card.resize(window.innerWidth, window.innerHeight);
         hideAddressBar();
         scene.start();
-        /*
-        setTimeout(function () {
-            card.flip(false, true);
-        }, 5000);
 
         setTimeout(function () {
-            
-        }
-        , 500);*/
+            card.dontFlip = false;
+            card.flip(false, true);
+        }, 10000);
+
     });
 
 
     window.addEventListener('devicemotion', ondevicemotion, true);
 
-    document.addEventListener("touchstart", function () {
+    document.addEventListener('touchstart', function (event) {
         event.preventDefault();
-        startTouch(e.targetTouches[0].pageX, e.targetTouches[0].pageY);
+        startTouch(event.targetTouches[0].pageX, event.targetTouches[0].pageY);
     }, false);
 
     document.addEventListener('mousedown', function (event) {
         startTouch(event.clientX, event.clientY);
-
     }, false);
 
     document.addEventListener('touchmove', function (event) {
