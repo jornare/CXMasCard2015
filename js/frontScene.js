@@ -22,6 +22,7 @@ window.cx = window.cx || {};
 
     
     ns.FrontScene = function(canvas, bgImgUrl) {
+        this.__proto__ = ns.Scene.prototype;
         ns.Scene.call(this, canvas, (ns.editMode? 'img/god-jul_2.png':'img/winter.jpg'));
         this.writer = new ns.Writer(scalePoints(godjul, this.scale.x*0.7 , this.scale.y ), this.scale.x * 140, this.scale.y * 100, 1);
         this.lamp = new ns.CanvasImage(this.width * 0.01,0,this.height*0.8 * 0.5, this.height * 0.8, 'img/lamp.png');

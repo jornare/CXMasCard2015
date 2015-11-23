@@ -102,7 +102,7 @@ window.cx = window.cx || {};
     }
 
     function endTouch() {
-        card.flip(false);
+        //card.flip(false);
         scene.touch = false;
     }
 

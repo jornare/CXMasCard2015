@@ -7,8 +7,7 @@ if (typeof Audio === undefined) {
     
     
     function createBuffer(width, height){
-        var buffer = document.createElement('canvas'),
-            ctx;
+        var buffer = document.createElement('canvas');
         buffer.width = width;
         buffer.height = height;
         return buffer;
@@ -108,8 +107,13 @@ if (typeof Audio === undefined) {
 
             if(this.fade) {
                 bufferCtx.globalCompositeOperation = "multiply";
-                bufferCtx.fillStyle = 'rgba(230,230,230,0.9)';
-                bufferCtx.fillRect(0, 0, scene.width, scene.height);
+                if(bufferCtx.globalCompositeOperation == 'multiply') {
+                    bufferCtx.fillStyle = 'rgba(230,230,230,0.9)';
+                    bufferCtx.fillRect(0, 0, scene.width, scene.height);  
+                } else {
+                    bufferCtx.clearRect(0,0, scene.width, scene.height);
+                }
+
             }
             bufferCtx.globalCompositeOperation = "source-over";
             //gradient for speckle
@@ -131,7 +135,6 @@ if (typeof Audio === undefined) {
                 
                 if(i) {
                     //
-                    
                     bufferCtx.beginPath();
                     bufferCtx.strokeStyle = 'rgba(170,150,140,0.5)';
                     bufferCtx.lineWidth = 8 * scale;
@@ -145,8 +148,6 @@ if (typeof Audio === undefined) {
                     bufferCtx.lineTo(this.trail[i-1].x, this.trail[i-1].y);
                     bufferCtx.stroke();
                 }
-
-
             }
 
             //gradient for center
@@ -159,20 +160,12 @@ if (typeof Audio === undefined) {
             bufferCtx.arc(this.x, this.y, 40 * scale, TWOPI, false);
             bufferCtx.fill();     
 
-
-
-
-            //bufferCtx.moveTo(this.x, this.y);
-            
             bufferCtx.lineWidth = 1;//2 * scale;
             bufferCtx.strokeStyle = strokeStyle;
             for (i = 0; i < numParticles; i++) {
                 p = self.particles[i];
 
                 bufferCtx.fillStyle = gradient;
-                //ctx.arc(p.location.x, p.location.y, p.radius, TWOPI, false);
-                //ctx.fill();
-                
                 p.draw(bufferCtx, scale);
             }
             

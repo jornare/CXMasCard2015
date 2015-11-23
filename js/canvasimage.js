@@ -1,6 +1,6 @@
 window.cx = window.cx || {};
 (function (ns) {
-    ns.CanvasImage = function (x, y, width, height, src, collisionMap) {
+    ns.CanvasImage = function (x, y, width, height, src) {
         var self = this;
         this.x = x;
         this.y = y;
@@ -8,7 +8,6 @@ window.cx = window.cx || {};
         this.height = height || 0.0;
         this.img = new Image();
         this.img.src = src;
-        this.collisionMap = collisionMap ? [] : false;
 
         this.img.onload = function () {
 

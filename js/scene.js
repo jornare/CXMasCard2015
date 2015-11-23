@@ -74,7 +74,7 @@ window.cx = window.cx || {};
                 ctx.globalAlpha = a;
             }
         }
-        (requestAnimationFrame || setTimeout)(function(){self.renderLoop()}, 10);
+        (window.requestAnimationFrame || setTimeout)(function(){self.renderLoop()}, 10);
     }
     
     ns.Scene.prototype.start = function() {
