@@ -15,11 +15,12 @@ window.cx = window.cx || {};
         card.resize(window.innerWidth, window.innerHeight);
         hideAddressBar();
         scene.start();
-
-        setTimeout(function () {
-            card.dontFlip = false;
-            card.flip(false, true);
-        }, 10000);
+        if(!ns.editMode) {
+            setTimeout(function () {
+                card.dontFlip = false;
+                card.flip(false, true);
+            }, 10000);
+        }
 
     });
 

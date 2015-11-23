@@ -177,16 +177,12 @@ if (typeof Audio === undefined) {
             var i, t;
             for(i = this.trail.length - 1; i > 0 ; i--) {
                 t = this.trail[i];
-
-
                 ctx.beginPath();
                 ctx.strokeStyle = 'rgba(255,240,100,0.9)';
                 ctx.lineWidth = 4 * this.scale;
                 ctx.moveTo(t.x, t.y);
                 ctx.lineTo(this.trail[i-1].x, this.trail[i-1].y);
                 ctx.stroke();
-
-
             }
         }
 /*

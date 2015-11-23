@@ -1,11 +1,29 @@
 window.cx = window.cx || {};
 (function (ns) {
+    /*
+    [614, 298],[631, 225],[661, 175],[673, 195],[648, 287],
+[589, 361],[555, 358],[561, 324],[599, 313],*/
     ns.editMode = false;
-    var godjul = [ [29, 212, 500], [39, 200, 500], [25, 208, 500], [27, 215, 500],
-        [29, 211],[78, 304],[226, 324],[390, 273],[424, 209],
-[352, 194],[271, 255],[267, 357],[360, 355],[426, 315],[418, 456],[366, 483],[383, 385],[470, 314],[519, 323],[523, 378],[477, 381],[481, 317],[582, 298],[618, 332],[614, 298],[631, 225],[661, 175],
-[673, 195],[648, 287],[589, 361],[555, 358],[561, 324],[599, 313],[670, 353],[758, 246],[784, 160],[818, 437],[729, 536],[644, 489],[701, 374],[839, 296],[854, 302],[863, 349],
-[898, 345],[917, 288],[915, 344],[949, 355],[1023, 261],[1054, 171],[1016, 163],[974, 284],[1001, 366],[1077, 374],[1095, 342],[1082, 323],[1082, 323],[1082, 323]]
+    var godjul = [  
+        [29, 211,1000],[78, 304],[226, 324],[390, 273],[424, 209],
+[352, 194],[271, 255],[267, 357],[360, 355],[426, 315],[418, 456],[366, 483],[383, 385],[470, 314],[519, 323],[523, 378],[477, 381],[481, 317],[582, 298],[618, 332],
+
+
+[599, 313],[561, 324],[555, 358],[589, 361],
+
+[648, 287],[673, 195],[661, 175],[631, 225],[616, 323],
+
+
+
+
+[670, 353],
+
+
+
+
+
+[758, 246],[784, 160],[818, 437],[729, 536],[644, 489],[701, 374],[839, 296],[858, 302],[863, 349],
+[898, 345],[917, 288],[915, 344],[949, 355],[1023, 261],[1054, 171],[1016, 163],[974, 284],[1001, 366],[1077, 374],[1095, 342],[1095, 342],[1095, 342]]
     
     
     function scalePoints(arr, sx, sy){
@@ -24,16 +42,21 @@ window.cx = window.cx || {};
     ns.FrontScene = function(canvas, bgImgUrl) {
         this.__proto__ = ns.Scene.prototype;
         ns.Scene.call(this, canvas, (ns.editMode? 'img/god-jul_2.png':'img/winter.jpg'));
-        this.writer = new ns.Writer(scalePoints(godjul, this.scale.x*0.7 , this.scale.y ), this.scale.x * 140, this.scale.y * 100, 1);
+        
+        if(ns.editMode){
+            this.writer = new ns.Writer(godjul, 0, 0, 1, true);
+        } else {
+            this.writer = new ns.Writer(scalePoints(godjul, this.scale.x*0.7 , this.scale.y ), this.scale.x * 140, this.scale.y * 100, 1);
+        }
         this.lamp = new ns.CanvasImage(this.width * 0.01,0,this.height*0.8 * 0.5, this.height * 0.8, 'img/lamp.png');
         this.lamp.y = this.height - this.lamp.height;
         this.sparkle = new ns.Sparkle(this, 100, 100);
         this.snowBehind = new ns.Snow(this, 300, this.scale.x);
         this.snowFront = new ns.Snow(this, 100, this.scale.x * 2);
         ns.editMode && (this.sparkle.draw = this.sparkle.drawModifyMode);
-        this.objects.push(this.snowBehind);
-        this.objects.push(this.lamp);
-        this.objects.push(this.snowFront);
+        (!ns.editMode) && this.objects.push(this.snowBehind);
+        (!ns.editMode) && this.objects.push(this.lamp);
+        (!ns.editMode) && this.objects.push(this.snowFront);
         this.objects.push(this.sparkle);
         this.isFinishedWriting = false;
         
@@ -52,7 +75,7 @@ window.cx = window.cx || {};
                 var point = this.writer.getPos(this.runTime);
                 this.sparkle.x = point.x;
                 this.sparkle.y = point.y;
-                if(this.runTime > this.writer.runTime) {
+                if(this.runTime > this.writer.runTime && !ns.modifyMode) {
                     this.isFinishedWriting = true;
                 }
             }
@@ -74,12 +97,14 @@ window.cx = window.cx || {};
                 this.selectedPoint && drawCross(ctx, this.selectedPoint.x, this.selectedPoint.y, 4);
             }
         };
+        
         this.resize = function(w, h) {
             this.__proto__.resize.call(this, w, h);
             this.lamp.width= this.height*0.8 * 0.5;
             this.lamp.height = this.height * 0.8;
             this.lamp.y = this.height - this.lamp.height;
-        }
+        };
+        
         this.addPoint = function(x, y){
             if(this.selectedPoint) {
                 this.selectedPoint.x = x;
@@ -88,7 +113,6 @@ window.cx = window.cx || {};
             } else {
                 this.writer.addPoint(x,y, 100);
             }
-
         };
         
         this.onMouseMove = function(x,y, buttons) {
@@ -103,6 +127,7 @@ window.cx = window.cx || {};
                 for(i=0;i<points.length; i++) {
                     if(distance(x,y, points[i].x, points[i].y) < 10) {
                         this.selectedPoint = points[i];
+                        console.log(this.selectedPoint.x, this.selectedPoint.y);
                     }
                 }  
             } else if(this.isFinishedWriting) {

@@ -158,8 +158,8 @@ window.cx = window.cx || {};
                 return letter;
         }
 
-        ns.Writer = function (str, x, y, scale) {
-                this.repeat = false;
+        ns.Writer = function (str, x, y, scale, repeat) {
+                this.repeat = !!repeat;
                 this.path = [];
                 this.runTime = 0;
                 if(str instanceof Array) {
@@ -274,7 +274,7 @@ window.cx = window.cx || {};
         
         ns.Writer.prototype.getPos = function (t) {
                 if(this.path.length<3){
-                        return{x:0,y:0};
+                        return {x:0, y:0};
                 }
                 var dt = this.repeat ? t % this.runTime : t,
                         dtp, //delta time position
