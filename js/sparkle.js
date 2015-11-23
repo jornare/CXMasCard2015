@@ -114,7 +114,7 @@ if (typeof Audio === undefined) {
             bufferCtx.globalCompositeOperation = "source-over";
             //gradient for speckle
             var gradient = bufferCtx.createRadialGradient(this.x, this.y, 0, this.x , this.y , 200 * scale);
-            gradient.addColorStop(0, "rgba(255,200,200, 0.8");
+            gradient.addColorStop(0, "rgba(255,200,200, 0.8)");
             gradient.addColorStop(1, "rgba(255,255,255, 0.7)");
 
             for(i = this.trail.length - 1; i >= 0 ; i--) {
