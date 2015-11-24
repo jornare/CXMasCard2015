@@ -19,7 +19,7 @@ window.cx = window.cx || {};
             setTimeout(function () {
                 card.dontFlip = false;
                 card.flip(false, true);
-            }, 10000);
+            }, 12000);
         }
 
     });

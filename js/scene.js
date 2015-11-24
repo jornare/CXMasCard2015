@@ -12,7 +12,7 @@ window.cx = window.cx || {};
 
         //this.cxlogo = new CanvasImage(100, 200, 400, 100, 'img/cxlogo.png', true);
         this.bg = bgImgUrl ? new ns.CanvasImage(0, 0, this.width, this.height, bgImgUrl) : null;
-        this.stats = false;
+        this.stats = (location.href.indexOf('stats') > 0);
         this.lastFrameTime = 0;
         this.elapsedTime = 0.0;
         this.runTime = 0;
@@ -42,14 +42,14 @@ window.cx = window.cx || {};
         for(; i < this.objects.length; i++) {
             this.objects[i].draw(ctx);
         }
-        this.stats && this.drawStats(ctx);
     };
     
     ns.Scene.prototype.drawStats = function (ctx) {
+        var renderTime = ((new Date().getTime()) - this.lastFrameTime);
         ctx.fillStyle = '#33e';
         ctx.font = 'italic bold 30px sans-serif';
         ctx.textBaseline = 'bottom';
-        ctx.fillText(((1000.0 / this.elapsedTime) << 0) + 'fps', 100, 100);
+        ctx.fillText(((1000.0 / this.elapsedTime) << 0) + 'fps ' + renderTime + 'ms render time', 100, 100);
     }
 
     ns.Scene.prototype.renderLoop = function() {
@@ -71,6 +71,7 @@ window.cx = window.cx || {};
             if(now - this.lastFrameTime > 30) {//reduce cpu by not drawing unless at least 30ms has elapsed
                 this.lastFrameTime = now; 
                 this.draw(ctx);
+                this.stats && this.drawStats(ctx);
                 ctx.globalAlpha = a;
             }
         }

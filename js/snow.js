@@ -30,7 +30,7 @@ window.cx = window.cx || {};
         
         this.create = function () {
             for (var i = 0; i < this.numFlakes; i++) {
-                this.snowFlakes.push(new SnowFlake(Math.random() * scene.width, Math.random() * scene.height, this.scale));
+                this.snowFlakes.push(new SnowFlake(Math.random() * scene.width, Math.random() * scene.height));
             }
         };
         this.resize();
@@ -45,13 +45,13 @@ window.cx = window.cx || {};
 
             for (i = 0; i < this.numFlakes; i++) {
                 p = self.snowFlakes[i];
-                p.y += elapsed * 0.005 * p.r;
+                p.y += elapsed * p.speed;
                 if(p.y > scene.height) {
                     p.y = -5;
                 }
-                if(p.r > 2) {
-                    dlx = p.x- this.light1.x;
-                    dly = p.y- this.light1.y;
+                if(p.x < scene.width * 0.5 && p.r > 2) {
+                    dlx = p.x - this.light1.x;
+                    dly = p.y - this.light1.y;
                     dl = Math.sqrt(dlx * dlx + dly * dly);//distance to light1
                     
                     dlx = p.x- this.light2.x;
@@ -69,10 +69,9 @@ window.cx = window.cx || {};
      
 
         this.draw = function (ctx) {
-            var i, scale = this.scale;
-
+            var i;
             for (i = 0; i < this.numFlakes; i++) {
-                self.snowFlakes[i].draw(ctx, scale);
+                self.snowFlakes[i].draw(ctx);
             }
             /* red dots to mark lights
             ctx.fillStyle='red';
@@ -96,15 +95,16 @@ window.cx = window.cx || {};
             }
         }
 */
-        function SnowFlake(x, y, scale) {
-            var speedX = (Math.random() - 0.5) * Math.random() * 5;
-            var speedY = (Math.random() - 0.5) * Math.random() * 5;
-            this.speed = {x: speedX, y: speedY};//{ x: -(scene.gravx * 2 + Math.random()) * 0.025, y: -(scene.gravy * 2 + Math.random()) * 0.025 };
+        function SnowFlake(x, y) {
+            //var speedX = (Math.random() - 0.5) * Math.random() * 5;
+            //var speedY = (Math.random() - 0.5) * Math.random() * 5;
+            //this.speed = {x: speedX, y: speedY};//{ x: -(scene.gravx * 2 + Math.random()) * 0.025, y: -(scene.gravy * 2 + Math.random()) * 0.025 };
             this.lastLocation = { x: x, y: y };
             this.x = x;
             this.y = y;
-            this.r = Math.random() * scene.height / 100;
+            this.r = Math.random() * scene.height / 130;
             this.specle = 1.0;
+            this.speed = 0.005 * this.r;
            /* this.speclex = 0.0;
             this.specley = 0.0;*/
         }
