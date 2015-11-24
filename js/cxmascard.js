@@ -105,17 +105,8 @@ window.cx = window.cx || {};
 
 
     function hideAddressBar() {
-        var docEl = window.document.documentElement,
-            requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen || null;
-        if(requestFullScreen){
-            requestFullScreen.call(docEl);
-        } else {
-            document.body.style.paddingTop = '1px';
-            setTimeout(function () { window.scrollTo(0, 1); }, 50);
-        }
-        //if (!window.location.hash) {
-
-        //}
+        document.body.style.paddingTop = '1px';
+        setTimeout(function () { window.scrollTo(0, 1); }, 50);
     }
 
 
