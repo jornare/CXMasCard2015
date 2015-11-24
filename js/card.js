@@ -26,7 +26,7 @@ window.cx = window.cx || {};
         this.dontFlip = true;
         this.lang = 'en';
         this.scene = new ns.FrontScene(canvas);
-        this.setLang('en');
+        this.setLang();
         this.setReceipient();
     };
     
