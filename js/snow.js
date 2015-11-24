@@ -5,14 +5,15 @@ window.cx = window.cx || {};
 
  
     //var tss = new Audio("");
-    ns.Snow = function (_scene, numFlakes, scale) {
+    ns.Snow = function (_scene, numFlakes, scale, noSpecle) {
         var self = this;
         var scene = _scene;
         this.scale = scale;
         this.snowFlakes = [];
-        this.time = 0;
         this.numFlakes = numFlakes;
         this.maxDist = _scene.width + _scene.height;
+        this.specle = !noSpecle;
+
        /* this.flare.onload = function () {
             self.flareWidth = self.flare.width * scene.scale.x;
             self.flareHeight = self.flare.height * scene.scale.y;
@@ -22,15 +23,17 @@ window.cx = window.cx || {};
 
         this.resize = function(width, height) {
             this.maxDist = _scene.width + _scene.height;
-            this.snowFlakes = [];
             this.light1 = {x: Math.min(_scene.height * 0.1, _scene.width * 0.06), y: _scene.height * 0.29};
             this.light2 = {x: Math.min(_scene.height * 0.35, _scene.width * 0.25), y: _scene.height * 0.35};
             this.create();
         };
         
         this.create = function () {
-            for (var i = 0; i < this.numFlakes; i++) {
-                this.snowFlakes.push(new SnowFlake(Math.random() * scene.width, Math.random() * scene.height));
+            var r, i;
+            this.snowFlakes = [];
+            for (i = 0; i < this.numFlakes; i++) {
+                r = Math.random();
+                this.snowFlakes.push(new SnowFlake(Math.random() * scene.width, Math.random() * scene.height, r * r * this.scale));
             }
         };
         this.resize();
@@ -41,21 +44,19 @@ window.cx = window.cx || {};
                 dlx,
                 dly,
                 dl;
-            this.time += elapsed;
 
             for (i = 0; i < this.numFlakes; i++) {
                 p = self.snowFlakes[i];
                 p.y += elapsed * p.speed;
                 if(p.y > scene.height) {
                     p.y = -5;
-                }
-                if(p.x < scene.width * 0.5 && p.r > 2) {
+                } else if(p.x < scene.width * 0.5 && p.r > 2) {
                     dlx = p.x - this.light1.x;
                     dly = p.y - this.light1.y;
                     dl = Math.sqrt(dlx * dlx + dly * dly);//distance to light1
                     
-                    dlx = p.x- this.light2.x;
-                    dly = p.y- this.light2.y;
+                    dlx = p.x - this.light2.x;
+                    dly = p.y - this.light2.y;
                     dl = Math.min(Math.sqrt(dlx * dlx + dly * dly), dl);//shortest distance to light
                     
                     p.specle = Math.max(1.0 - Math.pow(8.0 * dl / this.maxDist, 2), 0.1); 
@@ -65,8 +66,22 @@ window.cx = window.cx || {};
 
             }
         };
+        
 
-     
+        if(noSpecle) {
+            this.move = function (elapsed) {
+                var i,
+                    p;
+    
+                for (i = 0; i < this.numFlakes; i++) {
+                    p = self.snowFlakes[i];
+                    p.y += elapsed * p.speed;
+                    if(p.y > scene.height) {
+                        p.y = -5;
+                    }
+                }
+            };
+        }
 
         this.draw = function (ctx) {
             var i;
@@ -95,33 +110,46 @@ window.cx = window.cx || {};
             }
         }
 */
-        function SnowFlake(x, y) {
+        function SnowFlake(x, y, r) {
             //var speedX = (Math.random() - 0.5) * Math.random() * 5;
             //var speedY = (Math.random() - 0.5) * Math.random() * 5;
             //this.speed = {x: speedX, y: speedY};//{ x: -(scene.gravx * 2 + Math.random()) * 0.025, y: -(scene.gravy * 2 + Math.random()) * 0.025 };
             this.lastLocation = { x: x, y: y };
             this.x = x;
             this.y = y;
-            this.r = Math.random() * scene.height / 130;
+            this.r = r || Math.random() * scene.height / 130;
             this.specle = 1.0;
             this.speed = 0.005 * this.r;
            /* this.speclex = 0.0;
             this.specley = 0.0;*/
         }
-        
-        SnowFlake.prototype.draw = function (ctx) {
-            var r = this.r,
-                gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x , this.y , r);
-            gradient.addColorStop(0, "rgba(255, 250, 250, " + this.specle + ')');
-            gradient.addColorStop(0.3, "rgba(255, 250, 250, " + (this.specle * 0.9) + ")");
-            gradient.addColorStop(0.6, "rgba(255, 200, 200, 0.1)");
-            gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
-            ctx.beginPath();
-            ctx.fillStyle = gradient;
-            ctx.arc(this.x, this.y, r, 0, TWOPI);
-            ctx.fill();
+        if(this.specle) {
+            SnowFlake.prototype.draw = function (ctx) {
+                var r = this.r,
+                    gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x , this.y , r);
+                gradient.addColorStop(0, "rgba(255, 250, 250, " + this.specle + ')');
+                gradient.addColorStop(0.3, "rgba(255, 250, 250, " + (this.specle * 0.9) + ")");
+                gradient.addColorStop(0.6, "rgba(255, 200, 200, 0.1)");
+                gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
+                ctx.beginPath();
+                ctx.fillStyle = gradient;
+                ctx.arc(this.x, this.y, r, 0, TWOPI);
+                ctx.fill();
+            }
+        } else {
+            SnowFlake.prototype.draw = function (ctx) {
+                var r = this.r,
+                    gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x , this.y , r);
+                gradient.addColorStop(0, "rgba(255, 250, 250, 0.1)");
+                //gradient.addColorStop(0.3, "rgba(255, 250, 250, 0.1)");
+                gradient.addColorStop(0.6, "rgba(255, 200, 200, 0.1)");
+                gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
+                ctx.beginPath();
+                ctx.fillStyle = gradient;
+                ctx.arc(this.x, this.y, r, 0, TWOPI);
+                ctx.fill();
+            }
         }
-         
         this.create();
     }
 

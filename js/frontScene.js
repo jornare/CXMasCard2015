@@ -52,9 +52,11 @@ window.cx = window.cx || {};
         this.lamp = new ns.CanvasImage(this.width * 0.01,0,Math.min(this.height * 0.8 * 0.5, this.width * 0.3), this.height * 0.8, 'img/lamp.png');
         this.lamp.y = this.height - this.lamp.height;
         this.sparkle = new ns.Sparkle(this, 100, 100);
-        this.snowBehind = new ns.Snow(this, 300, this.scale.x);
-        this.snowFront = new ns.Snow(this, 100, this.scale.x * 2);
+        this.snowFarBehind = new ns.Snow(this, 200, this.width * 0.003, true);
+        this.snowBehind = new ns.Snow(this, 50, this.width * 0.004);
+        this.snowFront = new ns.Snow(this, 50, this.width *0.007);
         ns.editMode && (this.sparkle.draw = this.sparkle.drawModifyMode);
+        (!ns.editMode) && this.objects.push(this.snowFarBehind);
         (!ns.editMode) && this.objects.push(this.snowBehind);
         (!ns.editMode) && this.objects.push(this.lamp);
         (!ns.editMode) && this.objects.push(this.snowFront);
@@ -103,7 +105,6 @@ window.cx = window.cx || {};
             this.__proto__.resize.call(this, w, h);
             this.lamp.height = this.height * 0.8;
             this.lamp.width = Math.min(this.height * 0.8 * 0.5, this.width * 0.3);
-
             this.lamp.y = this.height - this.lamp.height;
         };
         
