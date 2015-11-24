@@ -96,6 +96,7 @@ window.cx = window.cx || {};
     }
     function touchMove(x, y) {
         scene.touch = { x: x, y: y, time: scene.lastFrameTime, dx: x - scene.touch.x, dy: y - scene.touch.y };
+        scene.onMouseMove(x, y, 0);
     }
 
     function endTouch() {
