@@ -101,7 +101,7 @@ window.cx = window.cx || {};
                 this.selectedPoint && drawCross(ctx, this.selectedPoint.x, this.selectedPoint.y, 4);
             }
             ctx.fillStyle = '#44a';
-            ctx.font = 'italic bold '+(this.height * 0.02) +'px sans-serif';
+            ctx.font = 'italic bold '+Math.ceil(this.height * 0.02) +'px sans-serif';
             ctx.textBaseline = 'bottom';
             ctx.fillText(byTxt, this.width - ctx.measureText(byTxt).width - 10, this.height - 30);
         };
