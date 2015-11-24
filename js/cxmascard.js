@@ -105,12 +105,10 @@ window.cx = window.cx || {};
 
 
     function hideAddressBar() {
-        if (!window.location.hash) {
-            if (document.height < window.outerHeight) {
-                document.body.style.height = (window.outerHeight + 50) + 'px';
-            }
+        //if (!window.location.hash) {
+            document.body.style.paddingTop = '1px';
             setTimeout(function () { window.scrollTo(0, 1); }, 50);
-        }
+        //}
     }
 
 
