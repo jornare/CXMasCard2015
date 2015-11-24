@@ -39,6 +39,7 @@ window.cx = window.cx || {};
         return result;
     }
 
+    var byTxt =  'E-card by Jørn Are Hatlelid @ Computas';
     
     ns.FrontScene = function(canvas, bgImgUrl) {
         this.__proto__ = ns.Scene.prototype;
@@ -99,6 +100,10 @@ window.cx = window.cx || {};
                 }
                 this.selectedPoint && drawCross(ctx, this.selectedPoint.x, this.selectedPoint.y, 4);
             }
+            ctx.fillStyle = '#00a';
+            ctx.font = 'italic bold 20px sans-serif';
+            ctx.textBaseline = 'bottom';
+            ctx.fillText(byTxt, this.width - ctx.measureText(byTxt).width - 10, this.height - 30);
         };
         
         this.resize = function(w, h) {
