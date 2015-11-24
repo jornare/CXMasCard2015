@@ -1,8 +1,7 @@
 window.cx = window.cx || {};
 
 (function (ns) {
-    var TWOPI = Math.PI * 2,
-        HALFPI = Math.PI * 0.5;
+    var TWOPI = Math.PI * 2;
 
  
     //var tss = new Audio("");
@@ -24,8 +23,8 @@ window.cx = window.cx || {};
         this.resize = function(width, height) {
             this.maxDist = _scene.width + _scene.height;
             this.snowFlakes = [];
-            this.light1 = {x: _scene.height * 0.1, y: _scene.height / 3};
-            this.light2 = {x: _scene.height * 0.35, y: _scene.height / 2.5};
+            this.light1 = {x: Math.min(_scene.height * 0.1, _scene.width * 0.06), y: _scene.height * 0.29};
+            this.light2 = {x: Math.min(_scene.height * 0.35, _scene.width * 0.25), y: _scene.height * 0.35};
             this.create();
         };
         

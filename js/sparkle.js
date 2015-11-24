@@ -202,7 +202,7 @@ if (typeof Audio === undefined) {
             var speedY = (Math.random() - 0.5) * Math.random() * 5;
             this.speed = {x: speedX, y: speedY};//{ x: -(scene.gravx * 2 + Math.random()) * 0.025, y: -(scene.gravy * 2 + Math.random()) * 0.025 };
             this.location = this.lastLocation = { x: x, y: y };
-            var size = scene.height / 80;
+            var size = (scene.height + scene.width) / 200;
             //radius range = 10-30
             //this.radius = size * 1.1 + Math.random() * size;
             //life range = 20-30

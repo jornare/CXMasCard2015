@@ -5,7 +5,7 @@ window.cx = window.cx || {};
 [589, 361],[555, 358],[561, 324],[599, 313],*/
     ns.editMode = false;
     var godjul = [  
-        [29, 211,1000],[78, 304],[226, 324],[390, 273],[424, 209],
+        [29, 211,3000],[78, 304],[226, 324],[390, 273],[424, 209],
 [352, 194],[271, 255],[267, 357],[360, 355],[426, 315],[418, 456],[366, 483],[383, 385],[470, 314],[519, 323],[523, 378],[477, 381],[481, 317],[582, 298],[618, 332],
 
 
@@ -23,7 +23,7 @@ window.cx = window.cx || {};
 
 
 [758, 246],[784, 160],[818, 437],[729, 536],[644, 489],[701, 374],[839, 296],[858, 302],[863, 349],
-[898, 345],[917, 288],[915, 344],[949, 355],[1023, 261],[1054, 171],[1016, 163],[974, 284],[1001, 366],[1077, 374],[1095, 342],[1095, 342],[1095, 342]]
+[898, 345],[917, 288],[915, 344],[949, 355],[1023, 261],[1054, 171],[1016, 163],[974, 284],[1001, 366],[1077, 374],[1095, 340],[1095, 340],[1095, 340]]
     
     
     function scalePoints(arr, sx, sy){
@@ -31,7 +31,8 @@ window.cx = window.cx || {};
         for(i=0; i<arr.length; i++) {
             result.push([
                 arr[i][0] *sx,
-                arr[i][1] *sy
+                arr[i][1] *sy,
+                arr[i][2]
             ]
             );
         }
@@ -48,7 +49,7 @@ window.cx = window.cx || {};
         } else {
             this.writer = new ns.Writer(scalePoints(godjul, this.scale.x*0.7 , this.scale.y ), this.scale.x * 140, this.scale.y * 100, 1);
         }
-        this.lamp = new ns.CanvasImage(this.width * 0.01,0,this.height*0.8 * 0.5, this.height * 0.8, 'img/lamp.png');
+        this.lamp = new ns.CanvasImage(this.width * 0.01,0,Math.min(this.height * 0.8 * 0.5, this.width * 0.3), this.height * 0.8, 'img/lamp.png');
         this.lamp.y = this.height - this.lamp.height;
         this.sparkle = new ns.Sparkle(this, 100, 100);
         this.snowBehind = new ns.Snow(this, 300, this.scale.x);
@@ -100,8 +101,9 @@ window.cx = window.cx || {};
         
         this.resize = function(w, h) {
             this.__proto__.resize.call(this, w, h);
-            this.lamp.width= this.height*0.8 * 0.5;
             this.lamp.height = this.height * 0.8;
+            this.lamp.width = Math.min(this.height * 0.8 * 0.5, this.width * 0.3);
+
             this.lamp.y = this.height - this.lamp.height;
         };
         
