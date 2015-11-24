@@ -10,6 +10,8 @@ window.cx = window.cx || {};
     });
 
     document.addEventListener('DOMContentLoaded', function () {
+        window.scrollTo(0, 1);//remove address bar on some devices
+        window.location.href = window.location.href + '#';
         window.card = card  = new ns.Card();
         scene = card.scene;
         card.resize(window.innerWidth, window.innerHeight);
