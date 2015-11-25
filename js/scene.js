@@ -47,9 +47,10 @@ window.cx = window.cx || {};
     ns.Scene.prototype.drawStats = function (ctx) {
         var renderTime = ((new Date().getTime()) - this.lastFrameTime);
         ctx.fillStyle = '#33e';
-        ctx.font = 'italic bold '+(this.scale.y * 30)+'px sans-serif';
+        ctx.font = 'italic bold '+(this.scale.y * 25)+'px sans-serif';
         ctx.textBaseline = 'bottom';
-        ctx.fillText(((1000.0 / this.elapsedTime) << 0) + 'fps ' + renderTime + 'ms render time', 50, 50);
+        ctx.fillText(((1000.0 / this.elapsedTime) << 0) + 'fps ' + renderTime + 'ms render time', 20, this.scale.y * 30 + 10);
+        ctx.fillText('w:' + this.width + '  winw: ' + window.innerWidth, 20, this.scale.y * 60 + 10);
     }
 
     ns.Scene.prototype.renderLoop = function() {
