@@ -45,11 +45,10 @@ window.cx = window.cx || {};
     };
     
     ns.Scene.prototype.drawStats = function (ctx) {
-        var renderTime = ((new Date().getTime()) - this.lastFrameTime);
         ctx.fillStyle = '#33e';
         ctx.font = 'italic bold '+(this.scale.y * 25)+'px sans-serif';
         ctx.textBaseline = 'bottom';
-        ctx.fillText(((1000.0 / this.elapsedTime) << 0) + 'fps ' + renderTime + 'ms render time', 20, this.scale.y * 30 + 10);
+        ctx.fillText(((1000.0 / this.elapsedTime) << 0) + 'fps ' + this.renderTime + 'ms render time', 20, this.scale.y * 30 + 10);
         ctx.fillText('w:' + this.width + '  winw: ' + window.innerWidth, 20, this.scale.y * 60 + 10);
     }
 
@@ -72,6 +71,7 @@ window.cx = window.cx || {};
             if(now - this.lastFrameTime > 30) {//reduce cpu by not drawing unless at least 30ms has elapsed
                 this.lastFrameTime = now; 
                 this.draw(ctx);
+                this.renderTime = ((new Date().getTime()) - this.lastFrameTime);
                 this.stats && this.drawStats(ctx);
                 ctx.globalAlpha = a;
             }

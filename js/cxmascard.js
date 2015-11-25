@@ -14,7 +14,7 @@ window.cx = window.cx || {};
     document.addEventListener('DOMContentLoaded', function () {
         window.card = card  = new ns.Card(window.innerWidth, window.innerHeight, pixelRatio);
         scene = card.scene;
-        card.resize(window.innerWidth, window.innerHeight, pixelRatio);
+        //card.resize(window.innerWidth, window.innerHeight, pixelRatio);
         hideAddressBar();
         scene.start();
         if(!ns.editMode) {

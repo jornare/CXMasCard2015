@@ -41,7 +41,11 @@ window.cx = window.cx || {};
 
     var byTxt =  'E-card by Jørn Are Hatlelid @ Computas';
     
+    
+    
+    
     ns.FrontScene = function(canvas, bgImgUrl) {
+        var self = this;
         this.__proto__ = ns.Scene.prototype;
         ns.Scene.call(this, canvas, (ns.editMode? 'img/god-jul_2.png':'img/winter.jpg'));
         
@@ -57,12 +61,23 @@ window.cx = window.cx || {};
         this.snowBehind = new ns.Snow(this, 50, this.width * 0.004);
         this.snowFront = new ns.Snow(this, 50, this.width *0.007);
         ns.editMode && (this.sparkle.draw = this.sparkle.drawModifyMode);
-        (!ns.editMode) && this.objects.push(this.snowFarBehind);
-        (!ns.editMode) && this.objects.push(this.snowBehind);
+        //(!ns.editMode) && this.objects.push(this.snowFarBehind);
+        //(!ns.editMode) && this.objects.push(this.snowBehind);
         (!ns.editMode) && this.objects.push(this.lamp);
         (!ns.editMode) && this.objects.push(this.snowFront);
         this.objects.push(this.sparkle);
         this.isFinishedWriting = false;
+        
+        setTimeout(function() {
+            if(self.renderTime < 20){
+                (!ns.editMode) && self.objects.unshift(self.snowBehind);
+                setTimeout(function(){
+                    if(self.renderTime < 20){
+                        (!ns.editMode) && self.objects.unshift(self.snowFarBehind);
+                    }                
+                }, 2000);
+            }
+        }, 2000);
         
         //this.writer.addPoint(0,0,100);
         

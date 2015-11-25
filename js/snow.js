@@ -23,8 +23,8 @@ window.cx = window.cx || {};
 
         this.resize = function(width, height) {
             this.maxDist = _scene.width + _scene.height;
-            this.light1 = {x: Math.min(_scene.height * 0.1, _scene.width * 0.06), y: _scene.height * 0.29};
-            this.light2 = {x: Math.min(_scene.height * 0.35, _scene.width * 0.25), y: _scene.height * 0.35};
+            this.light1 = {x: Math.floor(Math.min(_scene.height * 0.1, _scene.width * 0.06)), y: Math.floor(_scene.height * 0.29)};
+            this.light2 = {x: Math.floor(Math.min(_scene.height * 0.35, _scene.width * 0.25)), y: Math.floor(_scene.height * 0.35)};
             this.create();
         };
         
@@ -54,14 +54,13 @@ window.cx = window.cx || {};
                     dlx = p.x - this.light1.x;
                     dly = p.y - this.light1.y;
                     dl = Math.sqrt(dlx * dlx + dly * dly);//distance to light1
-                    
                     dlx = p.x - this.light2.x;
                     dly = p.y - this.light2.y;
                     dl = Math.min(Math.sqrt(dlx * dlx + dly * dly), dl);//shortest distance to light
                     
-                    p.specle = Math.max(1.0 - Math.pow(8.0 * dl / this.maxDist, 2), 0.1); 
+                    p.specle = Math.max(1.0 - Math.pow(8.0 * dl / this.maxDist, 2), 0.3); 
                 } else {
-                    p.specle = 0.1;
+                    p.specle = 0.3;
                 }
 
             }
@@ -85,9 +84,12 @@ window.cx = window.cx || {};
 
         this.draw = function (ctx) {
             var i;
+            ctx.globalCompositeOperation = "source-over";
+                            ctx.beginPath();
             for (i = 0; i < this.numFlakes; i++) {
                 self.snowFlakes[i].draw(ctx);
             }
+                            
             /* red dots to mark lights
             ctx.fillStyle='red';
             ctx.beginPath();
@@ -114,43 +116,69 @@ window.cx = window.cx || {};
             //var speedX = (Math.random() - 0.5) * Math.random() * 5;
             //var speedY = (Math.random() - 0.5) * Math.random() * 5;
             //this.speed = {x: speedX, y: speedY};//{ x: -(scene.gravx * 2 + Math.random()) * 0.025, y: -(scene.gravy * 2 + Math.random()) * 0.025 };
-            this.lastLocation = { x: x, y: y };
-            this.x = x;
-            this.y = y;
-            this.r = r || Math.random() * scene.height / 130;
+            //this.lastLocation = { x: x, y: y };
+            this.x = Math.floor(x);
+            this.y = Math.floor(y);
+            this.r = Math.ceil(r || Math.random() * scene.height / 130);
             this.specle = 1.0;
             this.speed = 0.005 * this.r;
+           // this.canvas = getSnowFlakeCanvas(this.r, this.specle);
            /* this.speclex = 0.0;
             this.specley = 0.0;*/
         }
+        
+        function getSnowFlakeCanvas(r, specle) {
+            var canvas = document.createElement('canvas');
+            canvas.width = this.r * 2 + 1;
+            canvas.height = this.r * 2 + 1;
+            var ctx = canvas.getContext('2d');
+            var gradient = ctx.createRadialGradient(r, r, 0, r , r , r);
+            gradient.addColorStop(0, "rgba(255, 250, 250, " + specle + ')');
+            //gradient.addColorStop(0.3, "rgba(255, 250, 250, " + (this.specle * 0.9) + ")");
+            //gradient.addColorStop(0.6, "rgba(255, 200, 200, 0.1)");
+            gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
+            ctx.beginPath();
+            ctx.fillStyle = gradient;
+            ctx.arc(r, r, r, 0, TWOPI);
+            ctx.fill();
+            return canvas;
+        }
+        
         if(this.specle) {
             SnowFlake.prototype.draw = function (ctx) {
+                //ctx.drawImage(this.canvas, this.x, this.y);
+                //return;
                 var r = this.r,
-                    gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x , this.y , r);
+                    y = Math.floor(this.y),
+                    x = this.x,
+                    gradient = ctx.createRadialGradient(x, y, 0, x, y , r);
                 gradient.addColorStop(0, "rgba(255, 250, 250, " + this.specle + ')');
                 //gradient.addColorStop(0.3, "rgba(255, 250, 250, " + (this.specle * 0.9) + ")");
                 //gradient.addColorStop(0.6, "rgba(255, 200, 200, 0.1)");
                 gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
                 ctx.beginPath();
                 ctx.fillStyle = gradient;
-                ctx.arc(this.x, this.y, r, 0, TWOPI);
+                ctx.arc(x, y, r, 0, TWOPI);
                 ctx.fill();
             }
         } else {
             SnowFlake.prototype.draw = function (ctx) {
+                //ctx.drawImage(this.canvas, this.x, this.y, 10, 10);
+                //return;
                 var r = this.r,
-                    gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x , this.y , r);
-                gradient.addColorStop(0, "rgba(230, 230, 230, 0.6)");
+                    y = Math.floor(this.y),
+                    x = this.x,
+                    gradient = ctx.createRadialGradient(x, y, 0, x, y , r);
+                gradient.addColorStop(0, "rgba(230, 230, 230, 0.3)");
                 //gradient.addColorStop(0.3, "rgba(255, 250, 250, 0.1)");
                 //gradient.addColorStop(0.6, "rgba(255, 200, 200, 0.1)");
                 gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
                 ctx.beginPath();
                 ctx.fillStyle = gradient;
-                ctx.arc(this.x, this.y, r, 0, TWOPI);
+                ctx.arc(x, y, r, 0, TWOPI);
                 ctx.fill();
             }
         }
-        this.create();
     }
 
 
