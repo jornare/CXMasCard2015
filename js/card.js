@@ -1,6 +1,7 @@
 window.cx = window.cx || {};
 (function (ns, document, window) {
     var location = window.location,
+        pixelRatio = 0.2,
         dom = {
             to: $('to'),
             to_en: $('to_en'),
@@ -16,13 +17,13 @@ window.cx = window.cx || {};
         return decodeURIComponent(receipient);
     }
 
-    ns.Card = function () {
+    ns.Card = function (w, h, pixelRatio) {
         dom.card = $('card');
         dom.to = $('to');
         dom.to_en = $('to_en');
         var canvas = $('scenecanvas');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        canvas.width = Math.floor(w * pixelRatio);
+        canvas.height = Math.floor(h * pixelRatio);
         this.dontFlip = true;
         this.lang = 'en';
         this.scene = new ns.FrontScene(canvas);
@@ -62,10 +63,10 @@ window.cx = window.cx || {};
         }
     };
 
-    ns.Card.prototype.resize = function (w, h) {
+    ns.Card.prototype.resize = function (w, h, pixelRatio) {
         dom.card.style.height = h + 'px';
         dom.card.style.width = w + 'px';
-        this.scene.onResize(w, h);
+        this.scene.onResize(w * pixelRatio, h * pixelRatio);
     }
 
     ns.Card.prototype.flip = function (toFront, force) {

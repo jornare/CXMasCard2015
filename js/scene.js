@@ -47,9 +47,9 @@ window.cx = window.cx || {};
     ns.Scene.prototype.drawStats = function (ctx) {
         var renderTime = ((new Date().getTime()) - this.lastFrameTime);
         ctx.fillStyle = '#33e';
-        ctx.font = 'italic bold 30px sans-serif';
+        ctx.font = 'italic bold '+(this.scale.y * 30)+'px sans-serif';
         ctx.textBaseline = 'bottom';
-        ctx.fillText(((1000.0 / this.elapsedTime) << 0) + 'fps ' + renderTime + 'ms render time', 100, 100);
+        ctx.fillText(((1000.0 / this.elapsedTime) << 0) + 'fps ' + renderTime + 'ms render time', 50, 50);
     }
 
     ns.Scene.prototype.renderLoop = function() {
@@ -64,7 +64,7 @@ window.cx = window.cx || {};
             this.lastFrameTime = now;
         }
         var elapsed = this.elapsedTime = now - this.lastFrameTime;
-        this.elapsedTimeSeconds = elapsed * 0.001;
+        //this.elapsedTimeSeconds = elapsed * 0.001;
         if (elapsed > 0) {
             this.runTime += elapsed;
             this.move(elapsed);

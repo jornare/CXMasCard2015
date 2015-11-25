@@ -1,18 +1,20 @@
 window.cx = window.cx || {};
 (function (document, window, ns) {
     var card,
-        scene;
+        scene,
+        pixelRatio = (window.innerWidth > 1024 ? 0.5 : 1);
 
 //set up events
 
     window.addEventListener('resize', function () {
-        card.resize(window.innerWidth, window.innerHeight);
+        pixelRatio = (window.innerWidth > 1024 ? 0.5 : 1);
+        card.resize(window.innerWidth, window.innerHeight, pixelRatio);
     });
 
     document.addEventListener('DOMContentLoaded', function () {
-        window.card = card  = new ns.Card();
+        window.card = card  = new ns.Card(window.innerWidth, window.innerHeight, pixelRatio);
         scene = card.scene;
-        card.resize(window.innerWidth, window.innerHeight);
+        card.resize(window.innerWidth, window.innerHeight, pixelRatio);
         hideAddressBar();
         scene.start();
         if(!ns.editMode) {
@@ -24,8 +26,6 @@ window.cx = window.cx || {};
 
     });
 
-
-    window.addEventListener('devicemotion', ondevicemotion, true);
 
     document.addEventListener('touchstart', function (event) {
         event.preventDefault();
@@ -45,7 +45,7 @@ window.cx = window.cx || {};
     document.addEventListener('touchend', endTouch, false);
 
     document.addEventListener('mousemove', function (event) {
-        scene.onMouseMove && scene.onMouseMove(event.clientX, event.clientY, event.buttons);
+        scene.onMouseMove && scene.onMouseMove(event.clientX * pixelRatio, event.clientY * pixelRatio, event.buttons);
         if (!scene.touch) {
             return;
         }
@@ -55,46 +55,16 @@ window.cx = window.cx || {};
     document.addEventListener('mouseup', endTouch, false);
 
 
-
-    function ondevicemotion(event) {
-        if (event.accelerationIncludingGravity.y === null) {
-            return;
-        }
-        var ax = event.acceleration.x / 9.81,
-            ay = -event.acceleration.y / 9.81,
-            az = -event.acceleration.z / 9.81,
-            gx = event.accelerationIncludingGravity.x / 9.81,
-            gy = -event.accelerationIncludingGravity.y / 9.81,
-            gz = -event.accelerationIncludingGravity.z / 9.81,
-            landscape = scene.width > scene.height;
-
-        if (landscape) {
-            if (gx - ax < 0) {
-                scene.gravx = gy;
-                scene.gravy = -gx - 2 * ax;
-            } else {
-                scene.gravx = gy;
-                scene.gravy = gx + 2 * ax;
-            }
-        } else {
-            scene.gravx = gx;
-            scene.gravy = gy + 2 * ay;
-            /*if(gy-ay>0){
-                scene.gravx = gx;
-                scene.gravy = gy;			
-            }else{
-                scene.gravx = gx;
-                scene.gravy = -gy;
-            }*/
-        }
-    };
-
     function startTouch(x, y) {
+        x = x  * pixelRatio;
+        y = y  * pixelRatio;
         ns.editMode && scene.addPoint(x,y);
         scene.stuckFlakes = [];
         scene.touch = { x: x, y: y, time: scene.lastFrameTime };
     }
     function touchMove(x, y) {
+        x = x  * pixelRatio;
+        y = y  * pixelRatio;
         scene.touch = { x: x, y: y, time: scene.lastFrameTime, dx: x - scene.touch.x, dy: y - scene.touch.y };
         scene.onMouseMove(x, y, 0);
     }

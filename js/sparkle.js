@@ -17,7 +17,7 @@ if (typeof Audio === undefined) {
     ns.Sparkle = function (_scene, x, y) {
         var self = this;
         var scene = _scene;
-        this.scale = 0.4;
+        this.scale = scene.scale.y;
         this.trail = [];
         this.showTrail = true;
         this.x = x;
@@ -81,7 +81,7 @@ if (typeof Audio === undefined) {
                                 y: p.location.y + p.speed.y * elapsed}//p.speed.y*(scene.gravy+1.0)*5;
 
                 //regenerate particles
-                if (p.remaining_life < 0 || p.radius < 0) {
+                if (p.remaining_life < 0) {
                     //a brand new particle replacing the dead one
                     this.particles[i] = new Particle(this.x, this.y, this.scale);
                 }
@@ -198,15 +198,15 @@ if (typeof Audio === undefined) {
         }
 */
         function Particle(x, y, scale) {
-            var speedX = (Math.random() - 0.5) * Math.random() * 5;
-            var speedY = (Math.random() - 0.5) * Math.random() * 5;
+            var speedX = (Math.random() - 0.5) * Math.random() * 5 * scale;
+            var speedY = (Math.random() - 0.5) * Math.random() * 5 * scale;
             this.speed = {x: speedX, y: speedY};//{ x: -(scene.gravx * 2 + Math.random()) * 0.025, y: -(scene.gravy * 2 + Math.random()) * 0.025 };
             this.location = this.lastLocation = { x: x, y: y };
-            var size = (scene.height + scene.width) / 200;
+            var size = (scene.height + scene.width) / 300;
             //radius range = 10-30
             //this.radius = size * 1.1 + Math.random() * size;
             //life range = 20-30
-            this.life = (size + Math.random() * size) * 10 * scale;
+            this.life = (size + Math.random() * size) * 10;
             this.remaining_life = this.life;
         }
         
@@ -223,7 +223,7 @@ if (typeof Audio === undefined) {
             ctx.lineTo(x + scale, y + scale);
             ctx.closePath();
             ctx.fill();*/
-            var gradient = ctx.createRadialGradient(x, y, 0, x , y, 25 * scale);
+            var gradient = ctx.createRadialGradient(x, y, 0, x , y, 2 + 25 * scale);
             gradient.addColorStop(0, "rgba(255, 250, 250, 0.5)");
             gradient.addColorStop(0.3, "rgba(255, 250, 250, 0.4)");
             gradient.addColorStop(0.6, "rgba(255, 200, 200, 0.2)");
@@ -233,7 +233,7 @@ if (typeof Audio === undefined) {
             ctx.beginPath();
             ctx.moveTo(x, y);
             for(i = 0; i < 10; i++) {
-                r = Math.random() * 25 * scale;
+                r = 1 + Math.random() * 10 * scale;
                 d = Math.random() * TWOPI;
                 ctx.lineTo(x + r * Math.cos(d), y + r * Math.sin(d));
                 ctx.lineTo(x + r * Math.cos(d + 0.2), y + r * Math.sin(d + 0.2));
