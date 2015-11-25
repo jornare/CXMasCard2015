@@ -128,8 +128,8 @@ window.cx = window.cx || {};
                 var r = this.r,
                     gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x , this.y , r);
                 gradient.addColorStop(0, "rgba(255, 250, 250, " + this.specle + ')');
-                gradient.addColorStop(0.3, "rgba(255, 250, 250, " + (this.specle * 0.9) + ")");
-                gradient.addColorStop(0.6, "rgba(255, 200, 200, 0.1)");
+                //gradient.addColorStop(0.3, "rgba(255, 250, 250, " + (this.specle * 0.9) + ")");
+                //gradient.addColorStop(0.6, "rgba(255, 200, 200, 0.1)");
                 gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
                 ctx.beginPath();
                 ctx.fillStyle = gradient;
@@ -140,9 +140,9 @@ window.cx = window.cx || {};
             SnowFlake.prototype.draw = function (ctx) {
                 var r = this.r,
                     gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x , this.y , r);
-                gradient.addColorStop(0, "rgba(255, 250, 250, 0.1)");
+                gradient.addColorStop(0, "rgba(230, 230, 230, 0.6)");
                 //gradient.addColorStop(0.3, "rgba(255, 250, 250, 0.1)");
-                gradient.addColorStop(0.6, "rgba(255, 200, 200, 0.1)");
+                //gradient.addColorStop(0.6, "rgba(255, 200, 200, 0.1)");
                 gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
                 ctx.beginPath();
                 ctx.fillStyle = gradient;
