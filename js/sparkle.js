@@ -3,7 +3,8 @@ if (typeof Audio === undefined) {
     var Audio = { play: function () { }, canPlayType: function () { return false }};
 }
 (function (ns) {
-    var TWOPI = Math.PI * 2;
+    var TWOPI = Math.PI * 2,
+        numParticles = 15;
     
     
     function createBuffer(width, height){
@@ -45,7 +46,7 @@ if (typeof Audio === undefined) {
             this.buffer = createBuffer(width, height);
         }
         this.create = function () {
-            for (var i = 0; i < 20; i++) {
+            for (var i = 0; i < numParticles; i++) {
                 this.particles.push(new Particle(self.x, self.y, this.scale));
             }
         };
@@ -57,9 +58,9 @@ if (typeof Audio === undefined) {
                 thisPos = {x: this.x, y: this.y, t: this.time};
             this.time += elapsed;
             this.fadeTimer += elapsed;
-            if(this.fadeTimer > 30){
+            if(this.fadeTimer > 60){
                 this.fade = true;
-                this.fadeTimer -= 30;
+                this.fadeTimer -= 60;
             } else {
                 this.fade = false;
             }
@@ -108,12 +109,11 @@ if (typeof Audio === undefined) {
             if(this.fade) {
                 bufferCtx.globalCompositeOperation = "multiply";
                 if(bufferCtx.globalCompositeOperation == 'multiply') {
-                    bufferCtx.fillStyle = 'rgba(230,230,230,0.9)';
+                    bufferCtx.fillStyle = 'rgba(200,200,200,0.9)';
                     bufferCtx.fillRect(0, 0, scene.width, scene.height);  
                 } else {
                     bufferCtx.clearRect(0,0, scene.width, scene.height);
                 }
-
             }
             bufferCtx.globalCompositeOperation = "source-over";
             //gradient for speckle
@@ -121,33 +121,27 @@ if (typeof Audio === undefined) {
             gradient.addColorStop(0, "rgba(255,200,200, 0.8)");
             gradient.addColorStop(1, "rgba(255,255,255, 0.7)");
 
-            for(i = this.trail.length - 1; i >= 0 ; i--) {
-                t = this.trail[i];
-                //gradient for center
-                gradient1 = bufferCtx.createRadialGradient(t.x, t.y, 0, t.x ,t.y, 10 * scale);
-                gradient1.addColorStop(0, "rgba(255, 255, 255, 1)");
-                gradient1.addColorStop(0.5, "rgba(220, 50, 0, 0.09)");
-               // gradient1.addColorStop(0.6, "rgba(220, 100, 100, 0.05)");
-                gradient1.addColorStop(1, "rgba(255, 255, 255, 0)");
-                bufferCtx.fillStyle = gradient1;
-                //bufferCtx.arc(t.x, t.y, 10 * scale, TWOPI, false);
-                //bufferCtx.fill();
-                
-                if(i) {
-                    //
-                    bufferCtx.beginPath();
-                    bufferCtx.strokeStyle = 'rgba(170,150,140,0.5)';
-                    bufferCtx.lineWidth = 8 * scale;
-                    bufferCtx.moveTo(t.x, t.y);
-                    bufferCtx.lineTo(this.trail[i-1].x, this.trail[i-1].y);
-                    bufferCtx.stroke();
-                    bufferCtx.beginPath();
-                    bufferCtx.strokeStyle = 'rgba(255,240,100,0.9)';
-                    bufferCtx.lineWidth = 4 * scale;
-                    bufferCtx.moveTo(t.x, t.y);
-                    bufferCtx.lineTo(this.trail[i-1].x, this.trail[i-1].y);
-                    bufferCtx.stroke();
+            //trail
+            if(this.trail.length > 1) {
+                bufferCtx.beginPath();
+                bufferCtx.strokeStyle = 'rgba(170,150,140,0.5)';
+                bufferCtx.lineWidth = 8 * scale;
+
+                bufferCtx.moveTo(this.trail[0].x, this.trail[0].y);
+                for(i = 1; i < this.trail.length ; i++) {
+                    t = this.trail[i];
+                    bufferCtx.lineTo(t.x, t.y);
                 }
+                bufferCtx.stroke();
+                bufferCtx.beginPath();
+                bufferCtx.strokeStyle = 'rgba(255,240,100,0.9)';
+                bufferCtx.lineWidth = 4 * scale;
+                bufferCtx.moveTo(this.trail[0].x, this.trail[0].y);
+                for(i = 1; i < this.trail.length ; i++) {
+                    t = this.trail[i];
+                    bufferCtx.lineTo(t.x, t.y);
+                }
+                bufferCtx.stroke();
             }
 
             //gradient for center

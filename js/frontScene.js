@@ -92,8 +92,8 @@ window.cx = window.cx || {};
         this.move = function(elapsed) {
             if(!this.isFinishedWriting) {
                 var point = this.writer.getPos(this.runTime);
-                this.sparkle.x = point.x;
-                this.sparkle.y = point.y;
+                this.sparkle.x = Math.floor(point.x);
+                this.sparkle.y = Math.floor(point.y);
                 if(this.runTime > this.writer.runTime && !ns.modifyMode) {
                     this.isFinishedWriting = true;
                 }
@@ -116,9 +116,9 @@ window.cx = window.cx || {};
                 this.selectedPoint && drawCross(ctx, this.selectedPoint.x, this.selectedPoint.y, 4);
             }
             ctx.fillStyle = '#44a';
-            ctx.font = 'italic bold '+Math.ceil(this.height * 0.02) +'px sans-serif';
+            ctx.font = 'italic bold '+Math.ceil(this.height * 0.026) +'px sans-serif';
             ctx.textBaseline = 'bottom';
-            ctx.fillText(byTxt, this.width - ctx.measureText(byTxt).width - 10, this.height - 30);
+            ctx.fillText(byTxt, this.width - ctx.measureText(byTxt).width - 10, this.height - 20);
         };
         
         this.resize = function(w, h) {

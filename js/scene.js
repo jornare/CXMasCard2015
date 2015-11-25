@@ -65,16 +65,14 @@ window.cx = window.cx || {};
         }
         var elapsed = this.elapsedTime = now - this.lastFrameTime;
         //this.elapsedTimeSeconds = elapsed * 0.001;
-        if (elapsed > 0) {
+        if (elapsed > 30) {//reduce cpu by not drawing unless at least 30ms has elapsed
             this.runTime += elapsed;
             this.move(elapsed);
-            if(now - this.lastFrameTime > 30) {//reduce cpu by not drawing unless at least 30ms has elapsed
-                this.lastFrameTime = now; 
-                this.draw(ctx);
-                this.renderTime = ((new Date().getTime()) - this.lastFrameTime);
-                this.stats && this.drawStats(ctx);
-                ctx.globalAlpha = a;
-            }
+            this.lastFrameTime = now; 
+            this.draw(ctx);
+            this.renderTime = ((new Date().getTime()) - this.lastFrameTime);
+            this.stats && this.drawStats(ctx);
+            ctx.globalAlpha = a;
         }
         (window.requestAnimationFrame || setTimeout)(function(){self.renderLoop()}, 10);
     }
