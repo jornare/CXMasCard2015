@@ -116,10 +116,7 @@ if (typeof Audio === undefined) {
                 }
             }
             bufferCtx.globalCompositeOperation = "source-over";
-            //gradient for speckle
-            var gradient = bufferCtx.createRadialGradient(this.x, this.y, 0, this.x , this.y , 200 * scale);
-            gradient.addColorStop(0, "rgba(255,200,200, 0.8)");
-            gradient.addColorStop(1, "rgba(255,255,255, 0.7)");
+
 
             //trail
             if(this.trail.length > 1) {
@@ -147,13 +144,18 @@ if (typeof Audio === undefined) {
             //gradient for center
             gradient1 = bufferCtx.createRadialGradient(this.x, this.y, 0, this.x ,this.y, 100 * scale);
             gradient1.addColorStop(0, "rgba(255, 250, 250, 0.2)");
-            gradient1.addColorStop(0.05, "rgba(220, 50, 0, 0.09)");
-            gradient1.addColorStop(0.1, "rgba(220, 100, 100, 0.05)");
+            gradient1.addColorStop(0.05, "rgba(220, 50, 0, 0.07)");
+            gradient1.addColorStop(0.1, "rgba(220, 100, 100, 0.04)");
             gradient1.addColorStop(1, "rgba(255, 255, 255, 0)");
             bufferCtx.fillStyle = gradient1;
-            bufferCtx.arc(this.x, this.y, 40 * scale, TWOPI, false);
+            bufferCtx.arc(this.x, this.y, 60 * scale, TWOPI, false);
             bufferCtx.fill();     
 
+
+            //gradient for speckle
+            var gradient = bufferCtx.createRadialGradient(this.x, this.y, 0, this.x , this.y , 200 * scale);
+            gradient.addColorStop(0, "rgba(255,200,200, 0.8)");
+            gradient.addColorStop(1, "rgba(255,255,255, 0.7)");
             bufferCtx.lineWidth = 1;//2 * scale;
             bufferCtx.strokeStyle = strokeStyle;
             for (i = 0; i < numParticles; i++) {
