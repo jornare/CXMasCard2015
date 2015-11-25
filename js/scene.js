@@ -1,4 +1,22 @@
 window.cx = window.cx || {};
+
+if(!window.requestAnimationFrame){
+    window.requestAnimationFrame = window.webkitRequestAnimationFrame ||
+          window.mozRequestAnimationFrame    ||
+          function( callback ){
+            window.setTimeout(callback, 1000 / 60);
+          };
+}
+window.requestAnimFrame = (function(){
+  return  window.requestAnimationFrame       ||
+          window.webkitRequestAnimationFrame ||
+          window.mozRequestAnimationFrame    ||
+          function( callback ){
+            window.setTimeout(callback, 1000 / 60);
+          };
+})();
+
+
 (function (ns) {
     ns.Scene = function (canvas, bgImgUrl) {
         this.isRunning = false;
@@ -45,10 +63,11 @@ window.cx = window.cx || {};
     };
     
     ns.Scene.prototype.drawStats = function (ctx) {
+        var fps = ((1000.0 / this.elapsedTime) << 0);
         ctx.fillStyle = '#33e';
         ctx.font = 'italic bold '+(this.scale.y * 25)+'px sans-serif';
         ctx.textBaseline = 'bottom';
-        ctx.fillText(((1000.0 / this.elapsedTime) << 0) + 'fps ' + this.renderTime + 'ms render time', 20, this.scale.y * 30 + 10);
+        ctx.fillText(fps + 'fps ' + this.renderTime + 'ms render time', 20, this.scale.y * 30 + 10);
         ctx.fillText('w:' + this.width + '  winw: ' + window.innerWidth, 20, this.scale.y * 60 + 10);
     }
 
@@ -59,13 +78,11 @@ window.cx = window.cx || {};
         var self = this,
             ctx = this.canvas.getContext('2d'),
             a = ctx.globalAlpha,
-            now = elapsed = new Date().getTime();
-        if (this.lastFrameTime == 0) {
-            this.lastFrameTime = now;
-        }
-        var elapsed = this.elapsedTime = now - this.lastFrameTime;
+            now = new Date().getTime();
+        var elapsed = now - this.lastFrameTime;
         //this.elapsedTimeSeconds = elapsed * 0.001;
-        if (elapsed > 30) {//reduce cpu by not drawing unless at least 30ms has elapsed
+        if (elapsed > 15) {//reduce cpu by not drawing unless at least 30ms has elapsed
+            this.elapsedTime = elapsed;
             this.runTime += elapsed;
             this.move(elapsed);
             this.lastFrameTime = now; 
@@ -74,12 +91,13 @@ window.cx = window.cx || {};
             this.stats && this.drawStats(ctx);
             ctx.globalAlpha = a;
         }
-        (window.requestAnimationFrame || setTimeout)(function(){self.renderLoop()}, 10);
+        window.requestAnimationFrame(function(){self.renderLoop()});
     }
     
     ns.Scene.prototype.start = function() {
         this.isRunning = true;
         this.runTime = 0;
+        this.lastFrameTime = new Date().getTime();
         this.renderLoop();
     }
     
