@@ -49,7 +49,6 @@ window.cx = window.cx || {};
                 p = self.snowFlakes[i];
                 p.y += elapsed * p.speed;
                 if(p.y > scene.height) {
-                    console.log(p.y);
                     p.y -= scene.height + 5;
                 } else if(p.x < scene.width * 0.5 && p.r > 2) {
                     dlx = p.x - this.light1.x;

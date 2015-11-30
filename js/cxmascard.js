@@ -5,6 +5,38 @@ window.cx = window.cx || {};
         pixelRatio = (window.innerWidth > 1024 ? 0.5 : 1);
         ns.iOS = /iPad|iPhone|iPod/.test(navigator.platform);
 
+
+
+
+    function startTouch(x, y) {
+        x = x  * pixelRatio;
+        y = y  * pixelRatio;
+        ns.editMode && scene.addPoint(x,y);
+        scene.stuckFlakes = [];
+        scene.touch = { x: x, y: y, time: scene.lastFrameTime };
+    }
+    function touchMove(x, y) {
+        x = x  * pixelRatio;
+        y = y  * pixelRatio;
+        scene.touch = { x: x, y: y, time: scene.lastFrameTime, dx: x - scene.touch.x, dy: y - scene.touch.y };
+        scene.onMouseMove(x, y, 0);
+    }
+
+    function endTouch() {
+        //card.flip(false);
+        scene.touch = false;
+    }
+
+
+    function hideAddressBar() {
+        document.body.style.paddingTop = '1px';
+        setTimeout(function () { window.scrollTo(0, 1); }, 50);
+    }
+
+    function showPlay() {
+        var icoPlay = document.getElementsByClassName('icoPlay')[0];
+        icoPlay.style.opacity = 0.8;
+    }
 //set up events
 
     window.addEventListener('resize', function () {
@@ -17,6 +49,7 @@ window.cx = window.cx || {};
         scene = card.scene;
         //card.resize(window.innerWidth, window.innerHeight, pixelRatio);
         hideAddressBar();
+        setTimeout(showPlay, 10000);
         /*if(!ns.editMode) {
             setTimeout(function () {
                 card.dontFlip = false;
@@ -28,6 +61,10 @@ window.cx = window.cx || {};
     document.addEventListener('touchstart', function(event) {
         scene.start();
     }, false);
+    
+    function start() {
+        scene.start();
+    }
 
 
     document.addEventListener('touchstart', function (event) {
@@ -56,32 +93,6 @@ window.cx = window.cx || {};
     }, false);
 
     document.addEventListener('mouseup', endTouch, false);
-
-
-    function startTouch(x, y) {
-        x = x  * pixelRatio;
-        y = y  * pixelRatio;
-        ns.editMode && scene.addPoint(x,y);
-        scene.stuckFlakes = [];
-        scene.touch = { x: x, y: y, time: scene.lastFrameTime };
-    }
-    function touchMove(x, y) {
-        x = x  * pixelRatio;
-        y = y  * pixelRatio;
-        scene.touch = { x: x, y: y, time: scene.lastFrameTime, dx: x - scene.touch.x, dy: y - scene.touch.y };
-        scene.onMouseMove(x, y, 0);
-    }
-
-    function endTouch() {
-        //card.flip(false);
-        scene.touch = false;
-    }
-
-
-    function hideAddressBar() {
-        document.body.style.paddingTop = '1px';
-        setTimeout(function () { window.scrollTo(0, 1); }, 50);
-    }
 
 
 }(document, window, window.cx));
