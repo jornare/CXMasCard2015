@@ -80,6 +80,9 @@ window.cx = window.cx || {};
         }
         
         this.start = function() {
+            if(this.isRunning) {
+                return;
+            }
             this.__proto__.start.call(this);
         
             //add more snow if cpu is ok with it
