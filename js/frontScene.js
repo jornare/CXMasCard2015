@@ -68,17 +68,6 @@ window.cx = window.cx || {};
         this.objects.push(this.sparkle);
         this.isFinishedWriting = false;
         
-        setTimeout(function() {
-            if(self.renderTime < 20){
-                (!ns.editMode) && self.objects.unshift(self.snowBehind);
-                setTimeout(function(){
-                    if(self.renderTime < 20){
-                        (!ns.editMode) && self.objects.unshift(self.snowFarBehind);
-                    }                
-                }, 2000);
-            }
-        }, 2000);
-        
         //this.writer.addPoint(0,0,100);
         
 
@@ -89,6 +78,22 @@ window.cx = window.cx || {};
                 this.sparkle.addTrailPos(p.x, p.y, startTime + i);
             }
         }
+        
+        this.start = function() {
+            this.__proto__.start.call(this);
+        
+            //add more snow if cpu is ok with it
+            setTimeout(function() {
+                if(self.renderTime < 20){
+                    (!ns.editMode) && self.objects.unshift(self.snowBehind);
+                    setTimeout(function(){
+                        if(self.renderTime < 20){
+                            (!ns.editMode) && self.objects.unshift(self.snowFarBehind);
+                        }                
+                    }, 2000);
+                }
+            }, 2000);
+        };
         
         this.move = function(elapsed) {
             if(!this.isFinishedWriting) {

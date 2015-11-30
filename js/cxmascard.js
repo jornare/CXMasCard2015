@@ -58,14 +58,12 @@ window.cx = window.cx || {};
         }*/
     });
     
-    document.addEventListener('touchstart', function(event) {
-        scene.start();
-    }, false);
+    var touchStartHandler;
     
-    function start() {
+    touchStartHandler = document.addEventListener('touchstart', function(event) {
         scene.start();
-    }
-
+        document.removeEventListener(touchStartHandler);
+    }, false);
 
     document.addEventListener('touchstart', function (event) {
         event.preventDefault();
