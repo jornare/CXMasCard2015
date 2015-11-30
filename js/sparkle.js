@@ -18,7 +18,7 @@ if (typeof Audio === undefined) {
     ns.Sparkle = function (_scene, x, y) {
         var self = this;
         var scene = _scene;
-        this.scale = scene.scale.y;
+        this.scale = scene.scale.d;
         this.trail = [];
         this.showTrail = true;
         this.x = x;

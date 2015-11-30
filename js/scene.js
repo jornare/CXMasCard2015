@@ -1,20 +1,32 @@
 window.cx = window.cx || {};
 
 if(!window.requestAnimationFrame){
-    window.requestAnimationFrame = window.webkitRequestAnimationFrame ||
-          window.mozRequestAnimationFrame    ||
-          function( callback ){
-            window.setTimeout(callback, 1000 / 60);
-          };
+    (function() {
+        var lastTime = 0;
+        var vendors = ['webkit', 'moz'];
+        for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+            window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
+            window.cancelAnimationFrame =
+            window[vendors[x]+'CancelAnimationFrame'] || window[vendors[x]+'CancelRequestAnimationFrame'];
+        }
+    
+        if (!window.requestAnimationFrame)
+            window.requestAnimationFrame = function(callback, element) {
+                var currTime = new Date().getTime();
+                var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+                var id = window.setTimeout(function() { callback(currTime + timeToCall); },
+                timeToCall);
+                lastTime = currTime + timeToCall;
+                return id;
+            };
+    
+        if (!window.cancelAnimationFrame)
+            window.cancelAnimationFrame = function(id) {
+                clearTimeout(id);
+            };
+    }());
 }
-window.requestAnimFrame = (function(){
-  return  window.requestAnimationFrame       ||
-          window.webkitRequestAnimationFrame ||
-          window.mozRequestAnimationFrame    ||
-          function( callback ){
-            window.setTimeout(callback, 1000 / 60);
-          };
-})();
+
 
 
 (function (ns) {
@@ -22,7 +34,8 @@ window.requestAnimFrame = (function(){
         this.isRunning = false;
         this.width = canvas.width;
         this.height = canvas.height;
-        this.scale = { x: this.width / 1024.0, y: this.height / 768.0 };
+        this.diagonal = Math.sqrt(this.width * this.width + this.height * this.height);
+        this.scale = { x: this.width / 1024.0, y: this.height / 768.0, d: this.diagonal / Math.sqrt(1024 * 1024 + 768 * 768) };
         this.resizeTimer = null;
         this.canvas = canvas;
         this.drawTimer = null;
