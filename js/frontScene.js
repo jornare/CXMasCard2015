@@ -81,16 +81,20 @@ window.cx = window.cx || {};
         
         //this.writer.addPoint(0,0,100);
         
-        this._move = function(elapsed) {
-            //this.sparkle.x = 200 + Math.cos(this.lastFrameTime / 400) * 200;
-            //this.sparkle.y = 200 + Math.sin(this.lastFrameTime / 400) * 200;    
-            this.sparkle.x = this.touch.x || this.sparkle.x;
-            this.sparkle.y = this.touch.y || this.sparkle.y;
-            this.__proto__.move.call(this, elapsed);
-        };
+
+        this.addInterpolatedPoints = function (startTime, elapsed) {
+            var i, p; //step every 10ms
+            for(i = 10; i < elapsed - 10; i += 10) {
+                p = this.writer.getPos(startTime + i);
+                this.sparkle.addTrailPos(p.x, p.y, startTime + i);
+            }
+        }
         
         this.move = function(elapsed) {
             if(!this.isFinishedWriting) {
+                if(elapsed > 20) {
+                    this.addInterpolatedPoints(this.runTime - elapsed, elapsed);
+                }
                 var point = this.writer.getPos(this.runTime);
                 this.sparkle.x = Math.floor(point.x);
                 this.sparkle.y = Math.floor(point.y);

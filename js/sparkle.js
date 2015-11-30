@@ -51,6 +51,12 @@ if (typeof Audio === undefined) {
             }
         };
 
+        this.addTrailPos = function(x, y, t) { //for a smoother trail on slow devices
+            if(this.showTrail){
+                this.trail.push({x: x, y: y, t: t});
+            }
+        }
+        
         this.move = function (elapsed) {
             var i,
                 p,
@@ -75,21 +81,16 @@ if (typeof Audio === undefined) {
                 //lets move the particles
                 p.remaining_life -= elapsed;
                 //p.radius -= elapsed * 0.002;
-
-                p.lastLocation = p.location;
                 
-                p.location = { x: p.location.x + p.speed.x * elapsed,////p.speed.x*(scene.gravx+1.0)*5;
-                                y: p.location.y + p.speed.y * elapsed}//p.speed.y*(scene.gravy+1.0)*5;
+                p.x = p.x + p.speed.x * elapsed;////p.speed.x*(scene.gravx+1.0)*5;
+                p.y = p.y + p.speed.y * elapsed;//p.speed.y*(scene.gravy+1.0)*5;
 
                 //regenerate particles
                 if (p.remaining_life < 0) {
                     //a brand new particle replacing the dead one
                     this.particles[i] = new Particle(this.x, this.y, this.scale);
                 }
-
-
             }
-
         };
 
      
@@ -197,7 +198,8 @@ if (typeof Audio === undefined) {
             var speedX = (Math.random() - 0.5) * Math.random() * 5 * scale;
             var speedY = (Math.random() - 0.5) * Math.random() * 5 * scale;
             this.speed = {x: speedX, y: speedY};//{ x: -(scene.gravx * 2 + Math.random()) * 0.025, y: -(scene.gravy * 2 + Math.random()) * 0.025 };
-            this.location = this.lastLocation = { x: x, y: y };
+            this.x = x;
+            this.y = y;
             var size = (scene.height + scene.width) / 300;
             //radius range = 10-30
             //this.radius = size * 1.1 + Math.random() * size;
@@ -207,19 +209,12 @@ if (typeof Audio === undefined) {
         }
         
         Particle.prototype.draw = function (ctx, scale) {
-            var x = this.location.x,
-                y = this.location.y,
+            var x = this.x,
+                y = this.y,
                 i,
                 r,
-                d;
-               /* 
-            ctx.beginPath();
-            ctx.moveTo(this.lastLocation.x, this.lastLocation.y);
-            ctx.lineTo(x - scale, y - scale);
-            ctx.lineTo(x + scale, y + scale);
-            ctx.closePath();
-            ctx.fill();*/
-            var gradient = ctx.createRadialGradient(x, y, 0, x , y, 2 + 25 * scale);
+                d,
+                gradient = ctx.createRadialGradient(x, y, 0, x , y, 2 + 25 * scale);
             gradient.addColorStop(0, "rgba(255, 250, 250, 0.5)");
             gradient.addColorStop(0.3, "rgba(255, 250, 250, 0.4)");
             gradient.addColorStop(0.6, "rgba(255, 200, 200, 0.2)");
