@@ -49,7 +49,8 @@ window.cx = window.cx || {};
                 p = self.snowFlakes[i];
                 p.y += elapsed * p.speed;
                 if(p.y > scene.height) {
-                    p.y = -5;
+                    console.log(p.y);
+                    p.y -= scene.height + 5;
                 } else if(p.x < scene.width * 0.5 && p.r > 2) {
                     dlx = p.x - this.light1.x;
                     dly = p.y - this.light1.y;
@@ -85,7 +86,6 @@ window.cx = window.cx || {};
         this.draw = function (ctx) {
             var i;
             ctx.globalCompositeOperation = "source-over";
-                            ctx.beginPath();
             for (i = 0; i < this.numFlakes; i++) {
                 self.snowFlakes[i].draw(ctx);
             }
@@ -99,6 +99,10 @@ window.cx = window.cx || {};
             ctx.arc(this.light2.x, this.light2.y, 2, 0, TWOPI);
             ctx.fill();*/
         };
+        
+        
+        
+        
 
 /*
         this.touch = function (x, y) {

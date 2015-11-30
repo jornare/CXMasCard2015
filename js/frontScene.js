@@ -150,7 +150,7 @@ window.cx = window.cx || {};
                 for(i=0;i<points.length; i++) {
                     if(distance(x,y, points[i].x, points[i].y) < 10) {
                         this.selectedPoint = points[i];
-                        console.log(this.selectedPoint.x, this.selectedPoint.y);
+                        //console.log(this.selectedPoint.x, this.selectedPoint.y);
                     }
                 }  
             } else if(this.isFinishedWriting) {

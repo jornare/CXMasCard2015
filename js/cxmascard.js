@@ -3,6 +3,7 @@ window.cx = window.cx || {};
     var card,
         scene,
         pixelRatio = (window.innerWidth > 1024 ? 0.5 : 1);
+        ns.iOS = /iPad|iPhone|iPod/.test(navigator.platform);
 
 //set up events
 
@@ -16,15 +17,17 @@ window.cx = window.cx || {};
         scene = card.scene;
         //card.resize(window.innerWidth, window.innerHeight, pixelRatio);
         hideAddressBar();
-        scene.start();
-        if(!ns.editMode) {
+        /*if(!ns.editMode) {
             setTimeout(function () {
                 card.dontFlip = false;
                 card.flip(false, true);
-            }, 14000);
-        }
-
+            }, 15000);
+        }*/
     });
+    
+    document.addEventListener('touchstart', function(event) {
+        scene.start();
+    }, false);
 
 
     document.addEventListener('touchstart', function (event) {
@@ -82,4 +85,3 @@ window.cx = window.cx || {};
 
 
 }(document, window, window.cx));
-

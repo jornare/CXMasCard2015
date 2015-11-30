@@ -24,20 +24,20 @@ window.cx = window.cx || {};
         var canvas = $('scenecanvas');
         canvas.width = Math.floor(w * pixelRatio);
         canvas.height = Math.floor(h * pixelRatio);
-        this.dontFlip = true;
+        //this.dontFlip = true;
         this.lang = 'en';
         this.scene = new ns.FrontScene(canvas);
         this.setLang();
         this.setReceipient();
     };
-    
+ 
     ns.Card.prototype.setReceipient = function (receipient) {
         dom.to.innerText = dom.to.textContent = dom.to_en.innerText = dom.to_en.textContent = receipient || getReceipientFromUrl() || (this.lang=='no'?'Deg':'You');
     }
 
     ns.Card.prototype.setLang = function (language) {
-        this.dontFlip = true;
-        setTimeout(function () { this.dontFlip = false }, 100);
+        //this.dontFlip = true;
+        //setTimeout(function () { this.dontFlip = false }, 100);
         if (!language) {
             if (location.href.toLowerCase().indexOf('card.html') >= 0) {
                 language = 'en';
@@ -75,6 +75,7 @@ window.cx = window.cx || {};
             if (this.dontFlip) {
                 return;
             }
+            scene.start();
         } else {
             if (force || scene.touch) {
                 if (force || (scene.touch.x < scene.width / 10 && scene.touch.y < scene.height / 10)) {

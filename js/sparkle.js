@@ -122,7 +122,7 @@ if (typeof Audio === undefined) {
             if(this.trail.length > 1) {
                 bufferCtx.beginPath();
                 bufferCtx.strokeStyle = 'rgba(170,150,140,0.5)';
-                bufferCtx.lineWidth = 8 * scale;
+                bufferCtx.lineWidth = 6 * scale;
 
                 bufferCtx.moveTo(this.trail[0].x, this.trail[0].y);
                 for(i = 1; i < this.trail.length ; i++) {
@@ -132,7 +132,7 @@ if (typeof Audio === undefined) {
                 bufferCtx.stroke();
                 bufferCtx.beginPath();
                 bufferCtx.strokeStyle = 'rgba(255,240,100,0.9)';
-                bufferCtx.lineWidth = 4 * scale;
+                bufferCtx.lineWidth = 2 * scale;
                 bufferCtx.moveTo(this.trail[0].x, this.trail[0].y);
                 for(i = 1; i < this.trail.length ; i++) {
                     t = this.trail[i];
