@@ -62,7 +62,7 @@ window.cx = window.cx || {};
     
     touchStartHandler = document.addEventListener('touchstart', function(event) {
         scene.start();
-        document.removeEventListener(touchStartHandler);
+        document.removeEventListener('touchstart', touchStartHandler, false);
     }, false);
 
     document.addEventListener('touchstart', function (event) {
