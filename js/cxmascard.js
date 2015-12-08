@@ -58,13 +58,6 @@ window.cx = window.cx || {};
         }*/
     });
     
-    var touchStartHandler;
-    
-    touchStartHandler = document.addEventListener('touchstart', function(event) {
-        scene.start();
-        document.removeEventListener('touchstart', touchStartHandler, false);
-    }, false);
-
     document.addEventListener('touchstart', function (event) {
         event.preventDefault();
         startTouch(event.targetTouches[0].pageX, event.targetTouches[0].pageY);
